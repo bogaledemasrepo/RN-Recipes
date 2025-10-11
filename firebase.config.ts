@@ -1,6 +1,12 @@
 import { initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
+import {
+  getAuth,
+  signInAnonymously,
+  signInWithCustomToken,
+  onAuthStateChanged,
+} from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
+
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -12,14 +18,25 @@ const firebaseConfig = {
   appId: "1:250205837333:web:b18aa5713cd90e1181961c",
   measurementId: "G-Z256FL5R4V"
 };
+const firebaseApp = initializeApp(firebaseConfig);
+export const authInstance = getAuth(firebaseApp);
+export const dbInstance = getFirestore(firebaseApp);
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const firestore = getFirestore(app);
+ 
 
-export { auth, firestore };
+// import { initializeApp } from 'firebase/app';
+// import { getAuth } from 'firebase/auth';
+// import { getFirestore } from 'firebase/firestore';
 
 
-// Initialize Firestore
-export const db = getFirestore(app);
+
+// // Initialize Firebase
+// const app = initializeApp(firebaseConfig);
+// const auth = getAuth(app);
+// const firestore = getFirestore(app);
+
+// export { auth, firestore };
+
+
+// // Initialize Firestore
+// export const db = getFirestore(app);
