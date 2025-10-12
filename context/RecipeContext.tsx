@@ -1,13 +1,12 @@
-import React, { createContext, useContext } from 'react';
+import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import { Recipe, Favorite } from '../types';
+import { useAuth } from './AuthContext';
 
 interface RecipeContextType {
   recipes: Recipe[];
-  setRecipes: (recipes: Recipe[]) => void;
   favorites: Favorite[];
   userId: string | null;
-  isAuthReady: boolean;
-  toggleFavorite: (recipe: Recipe | Favorite) => Promise<void>;
+  setIsFavorite: (recipeId: string,value:boolean) => void;
   isRecipeFavorite: (recipeId: string) => boolean;
 }
 
@@ -20,3 +19,29 @@ export const useRecipeContext = () => {
   }
   return context;
 };
+
+const RecipesProvider=({children}:{children:ReactNode})=>{
+  const {currentUser}=useAuth();
+  const [recipes,setRecipes]=useState<Recipe[]>([]);
+  const [favorites,setFavorites]=useState<Favorite[]>([])
+  const isRecipeFavorite=(recipeId: string)=>{
+    // return new Promise((res,rej)=>{
+    //   setTimeout(()=>{
+    //     res(true);
+    //   },100)
+    // })
+    return true
+  }
+  useEffect(()=>{
+    setRecipes([]);
+
+  },[])
+  const setIsFavorite=(recipeId: string,value:boolean)=>{
+    
+  }
+  return <RecipeContext.Provider value={{recipes,favorites,setIsFavorite,isRecipeFavorite,userId:currentUser?.uid||null}}>
+      {children}
+  </RecipeContext.Provider>
+}
+
+export default RecipesProvider

@@ -3,9 +3,10 @@ import { ScrollView, View, Text, Image, TouchableOpacity, StyleSheet } from 'rea
 import { useRoute } from '@react-navigation/native';
 import { useRecipeContext } from '../context/RecipeContext';
 import { parseIngredients } from '../utils/mockdata';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const DetailScreen: React.FC = () => {
-  const { recipes, userId, toggleFavorite, isRecipeFavorite } = useRecipeContext();
+  const { recipes, userId, setIsFavorite, isRecipeFavorite } = useRecipeContext();
   const route = useRoute();
   const { recipe } = route.params as { recipe: any };
   if (!recipe) return <Text style={styles.errorText}>Recipe not found.</Text>;
@@ -14,6 +15,7 @@ const DetailScreen: React.FC = () => {
   const ingredients = parseIngredients(fullRecipe);
 
   return (
+    <SafeAreaView style={{ flex: 1 }}>
     <ScrollView style={styles.screenContainer} contentContainerStyle={styles.detailScrollContent}>
       <Text style={styles.detailTitle}>{fullRecipe.strMeal}</Text>
       <Text style={styles.detailCategory}>{fullRecipe.strCategory} | {fullRecipe.strArea || 'N/A'}</Text>
@@ -26,7 +28,7 @@ const DetailScreen: React.FC = () => {
       </View>
       <TouchableOpacity
         style={[styles.detailFavoriteButton, isRecipeFavorite(fullRecipe.idMeal) && styles.detailFavoriteButtonRed]}
-        onPress={() => toggleFavorite(fullRecipe)}
+        onPress={() => setIsFavorite(fullRecipe,true)}
         disabled={!userId}
       >
         <Text style={styles.detailFavoriteText}>
@@ -43,6 +45,7 @@ const DetailScreen: React.FC = () => {
       <Text style={styles.instructionsText}>{fullRecipe.strInstructions}</Text>
       <View style={{ height: 50 }} />
     </ScrollView>
+    </SafeAreaView>
   );
 };
 

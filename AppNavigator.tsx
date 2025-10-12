@@ -7,6 +7,10 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useAuth } from './context/AuthContext'; // Assuming you have this working
 
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
+
 // Import all your screen components
 import LoginScreen from './screens/LoginScreen';
 import RegisterScreen from './screens/RegisterScreen';
@@ -86,10 +90,13 @@ const AuthStack: FC = () => (
  * The main bottom tab bar screens
  */
 const TabNavigator: FC = () => (
-  <Tab.Navigator>
-    <Tab.Screen name="Home" component={HomeScreen} />
-    <Tab.Screen name="Favorites" component={FavoritesScreen} />
-    <Tab.Screen name="Account" component={AccountScreen} />
+  <Tab.Navigator screenOptions={{headerShown:false}}>
+    <Tab.Screen name="Home" component={HomeScreen} options={{
+      tabBarIcon:({color,size,focused})=><FontAwesome5 name="home" size={size} color={color} />}} />
+    <Tab.Screen name="Favorites" component={FavoritesScreen} options={{
+      tabBarIcon:()=><MaterialIcons name="favorite" size={24} color="black" />}} />
+    <Tab.Screen name="Account" component={AccountScreen} options={{
+      tabBarIcon:()=> <FontAwesome name="user" size={24} color="black" />}}/>
   </Tab.Navigator>
 );
 
@@ -132,89 +139,9 @@ const AppNavigator: FC = () => {
   return (
     <NavigationContainer>
       {/* CORRECTED LOGIC: */}
-      {currentUser ? <RootStackNavigator /> : <AuthStack />}
+      {currentUser ? <TabNavigator /> : <AuthStack />}
     </NavigationContainer>
   );
 };
 
 export default AppNavigator;
-
-// import React from 'react';
-// import { NavigationContainer } from '@react-navigation/native';
-// import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-// import { createStackNavigator } from '@react-navigation/stack';
-// import SearchScreen from './screens/SearchScreen';
-// import FavoritesScreen from './screens/FavoritesScreen';
-// import DetailScreen from './screens/DetailScreen';
-// import LoginScreen from './screens/LoginScreen';
-// import RegisterScreen from './screens/RegisterScreen';
-// import IndexScreen from './screens/IndexScreen';
-// import { useAuth } from './context/AuthContext';
-// import HomeScreen from './screens/HomeScreen';
-// import AccountScreen from './screens/AccountScreen';
-// import { NativeStackScreenProps } from '@react-navigation/native-stack';
-
-
-// export type AuthStackParamList={
-//   Login:undefined,
-//   Register:undefined,
-//   Index:undefined
-// }
-// export type TabNavigatorParamList={
-//   Home:undefined,
-//   Favorites:undefined,
-//   Account:undefined
-// }
-// export type RootStackNavigatorParamList={
-//   Root:undefined,
-//   Search:undefined,
-//   Detail:undefined
-// }
-
-// export type IndexScreenProps = NativeStackScreenProps<AuthStackParamList, 'Index'>;
-// export type LoginScreenProbs= NativeStackScreenProps<AuthStackParamList, 'Login'>;
-// export type RegisterScreenProbs= NativeStackScreenProps<AuthStackParamList, 'Register'>;
-
-// export type HomeScreenProbs= NativeStackScreenProps<TabNavigatorParamList, 'Home'>;
-// export type FavoritesScreenProbs= NativeStackScreenProps<TabNavigatorParamList, 'Favorites'>;
-// export type AccountScreenProbs= NativeStackScreenProps<TabNavigatorParamList, 'Account'>;
-
-// export type RooScreenProbs= NativeStackScreenProps<RootStackNavigatorParamList, 'Root'>;
-// export type SearchScreenProbs= NativeStackScreenProps<RootStackNavigatorParamList, 'Search'>;
-// export type DetailScreenProbs= NativeStackScreenProps<RootStackNavigatorParamList, 'Detail'>;
-
-// const Tab = createBottomTabNavigator();
-// const Stack = createStackNavigator();
-
-// const AuthStack = () => (
-//   <Stack.Navigator screenOptions={{ headerShown: false }}>
-//     <Stack.Screen name="Login" component={LoginScreen} />
-//     <Stack.Screen name="Register" component={RegisterScreen} />
-//     <Stack.Screen name="Index" component={IndexScreen} />
-//   </Stack.Navigator>
-// );
-
-// const TabNavigator= ()=>(
-//   <Tab.Navigator>
-//     <Tab.Screen name="Home" component={HomeScreen} />
-//     <Tab.Screen name="Favorites" component={FavoritesScreen} />
-//     <Tab.Screen name="Account" component={AccountScreen} />
-//   </Tab.Navigator>)
-// const RootStackNavigator=()=>(
-// <Stack.Navigator>
-//   <Stack.Screen name='Root' component={TabNavigator} />
-//   <Stack.Screen name='Search' component={SearchScreen} />
-//   <Stack.Screen name='Detail' component={DetailScreen} />
-// </Stack.Navigator>)
-// const AppNavigator: React.FC = () => {
-//   const {currentUser}=useAuth();
-//   return (
-//     <NavigationContainer>
-//       {currentUser&&<AuthStack />}
-//       {!currentUser&&<RootStackNavigator />}
-//     </NavigationContainer>
-//   );
-// };
-
-
-// export default AppNavigator;
