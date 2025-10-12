@@ -1,22 +1,16 @@
 import React from 'react';
 import { ScrollView, View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { useRoute } from '@react-navigation/native';
-import { Recipe, Favorite } from '../types';
-import { parseIngredients } from "./../utils/mockdata"
+import { useRecipeContext } from '../context/RecipeContext';
+import { parseIngredients } from '../utils/mockdata';
 
-interface DetailScreenProps {
-  recipes: Recipe[];
-  userId: string | null;
-  toggleFavorite: (recipe: Recipe | Favorite) => Promise<void>;
-  isRecipeFavorite: (recipeId: string) => boolean;
-}
-
-const DetailScreen: React.FC<DetailScreenProps> = ({ recipes, userId, toggleFavorite, isRecipeFavorite }) => {
+const DetailScreen: React.FC = () => {
+  const { recipes, userId, toggleFavorite, isRecipeFavorite } = useRecipeContext();
   const route = useRoute();
-  const { recipe } = route.params as { recipe: Recipe | Favorite };
+  const { recipe } = route.params as { recipe: any };
   if (!recipe) return <Text style={styles.errorText}>Recipe not found.</Text>;
 
-  const fullRecipe = recipes.find(r => r.idMeal === recipe.idMeal) || recipe as Recipe;
+  const fullRecipe = recipes.find(r => r.idMeal === recipe.idMeal) || recipe;
   const ingredients = parseIngredients(fullRecipe);
 
   return (

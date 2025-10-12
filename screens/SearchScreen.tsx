@@ -2,18 +2,11 @@ import React, { useState, useCallback } from 'react';
 import { View, Text, TextInput, TouchableOpacity, FlatList, ActivityIndicator, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import RecipeCard from '../components/RecipeCard';
-import { Recipe, Favorite } from '../types';
+import { useRecipeContext } from '../context/RecipeContext';
 import { MOCK_RECIPES } from '../utils/mockdata';
 
-interface SearchScreenProps {
-  recipes: Recipe[];
-  setRecipes: (recipes: Recipe[]) => void;
-  userId: string | null;
-  toggleFavorite: (recipe: Recipe | Favorite) => Promise<void>;
-  isRecipeFavorite: (recipeId: string) => boolean;
-}
-
-const SearchScreen: React.FC<SearchScreenProps> = ({ recipes, setRecipes, userId, toggleFavorite, isRecipeFavorite }) => {
+const SearchScreen: React.FC = () => {
+  const { recipes, setRecipes, userId, toggleFavorite, isRecipeFavorite } = useRecipeContext();
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const navigation = useNavigation();
@@ -35,8 +28,8 @@ const SearchScreen: React.FC<SearchScreenProps> = ({ recipes, setRecipes, userId
     setIsLoading(false);
   }, [setRecipes]);
 
-  const handleRecipePress = (item: Recipe | Favorite) => {
-    navigation.navigate('Detail', { recipe: item });
+  const handleRecipePress = (item: any) => {
+    // navigation.navigate('Detail', { recipe: item });
   };
 
   return (

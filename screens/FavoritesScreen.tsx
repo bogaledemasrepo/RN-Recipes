@@ -2,21 +2,14 @@ import React from 'react';
 import { View, Text, FlatList, ActivityIndicator, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import RecipeCard from '../components/RecipeCard';
-import { Favorite } from '../types';
+import { useRecipeContext } from '../context/RecipeContext';
 
-interface FavoritesScreenProps {
-  favorites: Favorite[];
-  isAuthReady: boolean;
-  userId: string | null;
-  toggleFavorite: (recipe: Favorite) => Promise<void>;
-  isRecipeFavorite: (recipeId: string) => boolean;
-}
-
-const FavoritesScreen: React.FC<FavoritesScreenProps> = ({ favorites, isAuthReady, userId, toggleFavorite, isRecipeFavorite }) => {
+const FavoritesScreen: React.FC = () => {
+  const { favorites, isAuthReady, userId, toggleFavorite, isRecipeFavorite } = useRecipeContext();
   const navigation = useNavigation();
 
-  const handleRecipePress = (item: Favorite) => {
-    navigation.navigate('Detail', { recipe: item });
+  const handleRecipePress = (item: any) => {
+    // navigation.navigate('Detail', { recipe: item });
   };
 
   return (
