@@ -1,15 +1,13 @@
 import React from 'react';
 import { ScrollView, View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
-import { useRoute } from '@react-navigation/native';
 import { useRecipeContext } from '../context/RecipeContext';
 import { parseIngredients } from '../utils/mockdata';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { DetailScreenProbs } from '../AppNavigator';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const DetailScreen: React.FC<DetailScreenProbs> = ({navigation,route}) => {
-  console.log(route)
   const { recipes, userId,favorites, toggleFavorite} = useRecipeContext();
-  // const route = useRoute();
   const { recipe } = route.params as unknown as { recipe: any };
   if (!recipe) return <Text style={styles.errorText}>Recipe not found.</Text>;
 
@@ -18,8 +16,12 @@ const DetailScreen: React.FC<DetailScreenProbs> = ({navigation,route}) => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
+      <View style={{width:"100%",height:60,backgroundColor:"#D32F2F",display:"flex",alignItems:"center",justifyContent:"center",flexDirection:"row",position:"relative"}}>
+        <MaterialCommunityIcons name='arrow-left-bold-box-outline' size={36} color={"#ffffffbd"} style={{position:"absolute",left:0}} onPress={()=>navigation.goBack()} />
+         <Text style={styles.detailTitle}>{fullRecipe.strMeal}</Text>
+         <View></View>
+      </View>
     <ScrollView style={styles.screenContainer} contentContainerStyle={styles.detailScrollContent}>
-      <Text style={styles.detailTitle}>{fullRecipe.strMeal}</Text>
       <Text style={styles.detailCategory}>{fullRecipe.strCategory} | {fullRecipe.strArea || 'N/A'}</Text>
       <View style={styles.imageContainer}>
         <Image
@@ -64,8 +66,7 @@ const styles = StyleSheet.create({
   detailTitle: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 8,
+    color: '#ffffffbd',
   },
   detailCategory: {
     fontSize: 16,

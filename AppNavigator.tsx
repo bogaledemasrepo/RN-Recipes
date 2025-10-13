@@ -21,6 +21,7 @@ import AccountScreen from './screens/AccountScreen';
 import SearchScreen from './screens/SearchScreen';
 import DetailScreen from './screens/DetailScreen';
 import { ActivityIndicator, View } from 'react-native';
+import { Favorite, Recipe } from './types';
 
 // 1.1 Auth Stack
 export type AuthStackParamList = {
@@ -48,7 +49,7 @@ export type AccountScreenProbs = NativeStackScreenProps<TabNavigatorParamList, '
 export type RootStackNavigatorParamList = {
   Root: undefined; // The tab navigator is nested here
   Search: undefined;
-  Detail: { recipeId: string }; // Example: Detail screen takes a parameter
+  Detail: { recipe:Recipe | Favorite }; // Example: Detail screen takes a parameter
 };
 // Note: React Navigation v6 NativeStackScreenProps is preferred for new stacks, 
 // but using the generic StackNavigationProp for compatibility with your createStackNavigator call
@@ -89,9 +90,9 @@ const TabNavigator: FC = () => (
  * to be displayed over the tabs.
  */
 const RootStackNavigator: FC = () => (
-  <RootStackInstance.Navigator>
+  <RootStackInstance.Navigator screenOptions={{ headerShown: false }}>
     {/* The Tab Navigator is embedded here */}
-    <RootStackInstance.Screen name='Root' component={TabNavigator} options={{ headerShown: false }} /> 
+    <RootStackInstance.Screen name='Root' component={TabNavigator} /> 
     <RootStackInstance.Screen name='Search' component={SearchScreen} />
     <RootStackInstance.Screen name='Detail' component={DetailScreen} />
   </RootStackInstance.Navigator>

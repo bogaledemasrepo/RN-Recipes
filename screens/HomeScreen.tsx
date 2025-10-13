@@ -8,7 +8,7 @@ import { Favorite, Recipe } from '../types';
 const HomeScreen: React.FC<HomeScreenProbs> = ({navigation}) => {
   const { loading, userId, recipes,toggleFavorite} = useRecipeContext();
   const handleRecipePress = (item: Recipe | Favorite) => {
-    navigation.navigate('Detail',{recipeId:item.idMeal});
+    navigation.navigate('Detail',{recipe:item});
   };
 
   return (  
@@ -29,7 +29,7 @@ const HomeScreen: React.FC<HomeScreenProbs> = ({navigation}) => {
                 userId={userId}
                 toggleFavorite={(item)=>{new Promise((res,rej)=>{res("")})}}
                 isRecipeFavorite={()=>false}
-                onPress={handleRecipePress}
+                onPress={()=>handleRecipePress(item)}
               />
             )}
             contentContainerStyle={styles.listContent}
