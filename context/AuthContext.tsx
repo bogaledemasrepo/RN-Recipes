@@ -80,7 +80,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     login,
     logout,
   };
-
+console.log(currentUser)
   return (
     <AuthContext.Provider value={value}>
       {loading && <Text>Loading ...</Text>}

@@ -5,7 +5,7 @@ import RecipeCard from '../components/RecipeCard';
 import { useRecipeContext } from '../context/RecipeContext';
 
 const FavoritesScreen: React.FC = () => {
-  const { favorites, isAuthReady, userId, toggleFavorite, isRecipeFavorite } = useRecipeContext();
+  const { loading, userId, favorites,toggleFavorite} = useRecipeContext();
   const navigation = useNavigation();
 
   const handleRecipePress = (item: any) => {
@@ -14,12 +14,10 @@ const FavoritesScreen: React.FC = () => {
 
   return (
     <View style={styles.screenContainer}>
-      <Text style={styles.heading}>Your Favorite Recipes</Text>
-      {!isAuthReady ? (
+      {loading ? (
         <ActivityIndicator size="large" color="#FF6F61" style={styles.loadingIndicator} />
       ) : (
         <>
-          {userId && <Text style={styles.userIdDisplay}>User ID: {userId}</Text>}
           <FlatList
             data={favorites}
             keyExtractor={(item) => item.idMeal}
@@ -27,8 +25,8 @@ const FavoritesScreen: React.FC = () => {
               <RecipeCard
                 item={item}
                 userId={userId}
-                toggleFavorite={toggleFavorite}
-                isRecipeFavorite={isRecipeFavorite}
+                toggleFavorite={(item)=>{new Promise((res,rej)=>{res("")})}}
+                isRecipeFavorite={()=>false}
                 onPress={handleRecipePress}
               />
             )}

@@ -1,11 +1,12 @@
 import React from 'react';
 import { TouchableOpacity, View, Text, Image, StyleSheet } from 'react-native';
 import { Recipe, Favorite } from '../types';
+import { MaterialIcons } from '@expo/vector-icons';
 
 interface RecipeCardProps {
   item: Recipe | Favorite;
   userId: string | null;
-  toggleFavorite: (recipe: Recipe | Favorite) => Promise<void>;
+  toggleFavorite: (recipe: Recipe | Favorite) =>void;
   isRecipeFavorite: (recipeId: string) => boolean;
   onPress: (item: Recipe | Favorite) => void;
 }
@@ -19,19 +20,16 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ item, userId, toggleFavorite, i
     />
     <View style={styles.cardContent}>
       <Text style={styles.cardTitle} numberOfLines={1}>{item.strMeal}</Text>
-      <Text style={styles.cardSubtitle}>{item.strCategory} | {'N/A'}</Text>
+      <Text style={styles.cardSubtitle}>{item.strCategory}</Text>
       <Text style={styles.userIdText}>
         User: {userId ? userId.substring(0, 8) + '...' : 'Loading'}
       </Text>
     </View>
     <TouchableOpacity
-      style={styles.favoriteButton}
       onPress={() => toggleFavorite(item)}
       disabled={!userId}
     >
-      <Text style={styles.favoriteIcon}>
-        {isRecipeFavorite(item.idMeal) ? '❤️' : '🤍'}
-      </Text>
+      <MaterialIcons name="favorite" size={24}  color={"#33333340"}  />
     </TouchableOpacity>
   </TouchableOpacity>
 );
@@ -76,6 +74,7 @@ const styles = StyleSheet.create({
   favoriteButton: {
     padding: 8,
     justifyContent: 'center',
+
   },
   favoriteIcon: {
     fontSize: 20,

@@ -1,13 +1,15 @@
 import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import { Recipe, Favorite } from '../types';
 import { useAuth } from './AuthContext';
+import { MOCK_RECIPES } from '../utils/mockdata';
+import { Text } from 'react-native';
 
 interface RecipeContextType {
   recipes: Recipe[];
-  favorites: Favorite[];
   userId: string | null;
-  setIsFavorite: (recipeId: string,value:boolean) => void;
-  isRecipeFavorite: (recipeId: string) => boolean;
+  toggleFavorite: (value: Favorite) => void;
+  loading:boolean;
+  favorites:Favorite[];
 }
 
 export const RecipeContext = createContext<RecipeContextType | undefined>(undefined);
@@ -24,22 +26,28 @@ const RecipesProvider=({children}:{children:ReactNode})=>{
   const {currentUser}=useAuth();
   const [recipes,setRecipes]=useState<Recipe[]>([]);
   const [favorites,setFavorites]=useState<Favorite[]>([])
-  const isRecipeFavorite=(recipeId: string)=>{
-    // return new Promise((res,rej)=>{
-    //   setTimeout(()=>{
-    //     res(true);
-    //   },100)
-    // })
-    return true
-  }
+  const [loading,setLoading]=useState<boolean>(false);
   useEffect(()=>{
-    setRecipes([]);
-
+    setLoading(true)
+    try {
+      async function getRecipes() {
+      const response =await fetch("https://www.themealdb.com/api/json/v1/1/search.php?f=a");
+      const data = await response.json() as {meals:Recipe[]}
+        setLoading(false)
+      setRecipes(data.meals)
+      
+    }
+    getRecipes();
+    } catch (error) {
+      setLoading(false)
+    }
+   
+setLoading(false)
   },[])
-  const setIsFavorite=(recipeId: string,value:boolean)=>{
+  const toggleFavorite=(value: Favorite)=>{
     
   }
-  return <RecipeContext.Provider value={{recipes,favorites,setIsFavorite,isRecipeFavorite,userId:currentUser?.uid||null}}>
+  return <RecipeContext.Provider value={{recipes,favorites,toggleFavorite,loading,userId:currentUser?.uid||null}}>
       {children}
   </RecipeContext.Provider>
 }

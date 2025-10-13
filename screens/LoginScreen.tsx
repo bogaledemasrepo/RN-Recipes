@@ -108,7 +108,7 @@ const LoginScreen: React.FC<LoginScreenProbs> = ({ navigation }) => {
               autoCapitalize="none"
             />
             {getError('password') && <Text style={styles.errorText}>{getError('password')}</Text>}
-      <CustomButton label={loading ? "Logging In..." : "Log In"} disabled={loading} onPress={handleLogin}/>
+      <CustomButton label={loading ? "Logging In..." : "Log In"} disabled={loading} onPress={()=>handleLogin()}/>
       {/* Optional: Add a link/button to the sign-up screen */}
       <TouchableWithoutFeedback onPress={()=>navigation.navigate("Register")}>
         <Text style={styles.link}>

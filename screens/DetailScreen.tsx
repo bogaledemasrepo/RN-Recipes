@@ -4,11 +4,13 @@ import { useRoute } from '@react-navigation/native';
 import { useRecipeContext } from '../context/RecipeContext';
 import { parseIngredients } from '../utils/mockdata';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { DetailScreenProbs } from '../AppNavigator';
 
-const DetailScreen: React.FC = () => {
-  const { recipes, userId, setIsFavorite, isRecipeFavorite } = useRecipeContext();
-  const route = useRoute();
-  const { recipe } = route.params as { recipe: any };
+const DetailScreen: React.FC<DetailScreenProbs> = ({navigation,route}) => {
+  console.log(route)
+  const { recipes, userId,favorites, toggleFavorite} = useRecipeContext();
+  // const route = useRoute();
+  const { recipe } = route.params as unknown as { recipe: any };
   if (!recipe) return <Text style={styles.errorText}>Recipe not found.</Text>;
 
   const fullRecipe = recipes.find(r => r.idMeal === recipe.idMeal) || recipe;
@@ -27,12 +29,12 @@ const DetailScreen: React.FC = () => {
         />
       </View>
       <TouchableOpacity
-        style={[styles.detailFavoriteButton, isRecipeFavorite(fullRecipe.idMeal) && styles.detailFavoriteButtonRed]}
-        onPress={() => setIsFavorite(fullRecipe,true)}
+        style={[styles.detailFavoriteButton,styles.detailFavoriteButtonRed]}
+        onPress={() => toggleFavorite(fullRecipe)}
         disabled={!userId}
       >
         <Text style={styles.detailFavoriteText}>
-          {isRecipeFavorite(fullRecipe.idMeal) ? '❤️ Remove from Favorites' : '🤍 Add to Favorites'}
+          {favorites.includes(fullRecipe.idMeal) ? '❤️ Remove from Favorites' : '🤍 Add to Favorites'}
         </Text>
       </TouchableOpacity>
       <Text style={styles.sectionTitle}>Ingredients:</Text>

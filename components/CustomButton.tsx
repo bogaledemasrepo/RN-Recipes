@@ -4,7 +4,7 @@ interface ButtonProps{
     label:string,
     textColor?:string,
     bgColor?:string,
-    disabled:boolean,
+    disabled?:boolean,
     onPress:()=>void
 }
 const CustomButton = ({onPress,label,textColor,bgColor,disabled}:ButtonProps) => {

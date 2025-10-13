@@ -1,8 +1,8 @@
 // src/App.tsx
 
 import React, { FC } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { CompositeScreenProps, NavigationContainer } from '@react-navigation/native';
+import { BottomTabScreenProps, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useAuth } from './context/AuthContext'; // Assuming you have this working
@@ -22,10 +22,6 @@ import SearchScreen from './screens/SearchScreen';
 import DetailScreen from './screens/DetailScreen';
 import { ActivityIndicator, View } from 'react-native';
 
-// --------------------------------------------------------------------------
-// 1. TYPE DEFINITIONS
-// --------------------------------------------------------------------------
-
 // 1.1 Auth Stack
 export type AuthStackParamList = {
   Login: undefined;
@@ -43,7 +39,7 @@ export type TabNavigatorParamList = {
   Favorites: undefined;
   Account: undefined;
 };
-export type HomeScreenProbs = NativeStackScreenProps<TabNavigatorParamList, 'Home'>;
+// export type HomeScreenProbs = NativeStackScreenProps<TabNavigatorParamList, 'Home'>;
 export type FavoritesScreenProbs = NativeStackScreenProps<TabNavigatorParamList, 'Favorites'>;
 export type AccountScreenProbs = NativeStackScreenProps<TabNavigatorParamList, 'Account'>;
 
@@ -60,24 +56,12 @@ export type RooScreenProbs = NativeStackScreenProps<RootStackNavigatorParamList,
 export type SearchScreenProbs = NativeStackScreenProps<RootStackNavigatorParamList, 'Search'>;
 export type DetailScreenProbs = NativeStackScreenProps<RootStackNavigatorParamList, 'Detail'>;
 
-
-// --------------------------------------------------------------------------
-// 2. TYPED NAVIGATOR INSTANCES
-// --------------------------------------------------------------------------
-
 // Create typed instances of the navigators
 const AuthStackInstance = createStackNavigator<AuthStackParamList>();
 const Tab = createBottomTabNavigator<TabNavigatorParamList>();
 const RootStackInstance = createStackNavigator<RootStackNavigatorParamList>();
 
 
-// --------------------------------------------------------------------------
-// 3. NAVIGATOR COMPONENTS
-// --------------------------------------------------------------------------
-
-/**
- * Stack for Login, Register, and Index screens (No header)
- */
 const AuthStack: FC = () => (
   <AuthStackInstance.Navigator screenOptions={{ headerShown: false }}>
     <AuthStackInstance.Screen name="Login" component={LoginScreen} />
@@ -92,11 +76,11 @@ const AuthStack: FC = () => (
 const TabNavigator: FC = () => (
   <Tab.Navigator screenOptions={{headerShown:false}}>
     <Tab.Screen name="Home" component={HomeScreen} options={{
-      tabBarIcon:({color,size,focused})=><FontAwesome5 name="home" size={size} color={color} />}} />
+      tabBarIcon:({color,size})=><FontAwesome5 name="home" size={size} color={color} />}} />
     <Tab.Screen name="Favorites" component={FavoritesScreen} options={{
-      tabBarIcon:()=><MaterialIcons name="favorite" size={24} color="black" />}} />
+      tabBarIcon:({color,size})=><MaterialIcons name="favorite" size={size}  color={color}  />}} />
     <Tab.Screen name="Account" component={AccountScreen} options={{
-      tabBarIcon:()=> <FontAwesome name="user" size={24} color="black" />}}/>
+      tabBarIcon:({color,size})=> <FontAwesome name="user" size={size}  color={color}  />}}/>
   </Tab.Navigator>
 );
 
@@ -113,17 +97,11 @@ const RootStackNavigator: FC = () => (
   </RootStackInstance.Navigator>
 );
 
+export type HomeScreenProbs = CompositeScreenProps<
+  BottomTabScreenProps<TabNavigatorParamList, 'Home'>, // The screen is 'Home' in the Tab Navigator
+  NativeStackScreenProps<RootStackNavigatorParamList>   // The parent navigator is the Root Stack
+>;
 
-// --------------------------------------------------------------------------
-// 4. MAIN APP ENTRY POINT
-// --------------------------------------------------------------------------
-
-/**
- * Conditional rendering based on the authentication state.
- * * Logic:
- * - currentUser is truthy (logged in): Show the main app (RootStackNavigator).
- * - currentUser is falsy (logged out): Show the authentication flow (AuthStack).
- */
 const AppNavigator: FC = () => {
   const { currentUser, loading } = useAuth();
 
@@ -139,7 +117,7 @@ const AppNavigator: FC = () => {
   return (
     <NavigationContainer>
       {/* CORRECTED LOGIC: */}
-      {currentUser ? <TabNavigator /> : <AuthStack />}
+      {currentUser ? <RootStackNavigator /> : <AuthStack />}
     </NavigationContainer>
   );
 };
