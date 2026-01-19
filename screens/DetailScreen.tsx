@@ -15,7 +15,10 @@ import { parseIngredients } from "../utils/parseIngredient";
 
 const { width } = Dimensions.get("window");
 
-const DetailScreen: React.FC<{ navigation: any; route: any }> = ({ navigation, route }) => {
+const DetailScreen: React.FC<{ navigation: any; route: any }> = ({
+  navigation,
+  route,
+}) => {
   const { recipes, favorites, toggleFavorite } = useRecipeContext();
   const { recipe } = route.params as { recipe: any };
 
@@ -24,24 +27,26 @@ const DetailScreen: React.FC<{ navigation: any; route: any }> = ({ navigation, r
   const fullRecipe = recipes.find((r) => r.idMeal === recipe.idMeal) || recipe;
   const ingredients = parseIngredients(fullRecipe);
   const isFavorite = favorites.includes(fullRecipe.idMeal);
-
   return (
     <View style={styles.mainContainer}>
       <StatusBar barStyle="light-content" />
-      
+
       {/* Floating Header Buttons */}
       <View style={styles.headerOverlay}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.iconButton}>
-          <Ionicons name="chevron-back" size={24} color="#1A1A1A" />
-        </TouchableOpacity>
-        <TouchableOpacity 
-          onPress={() => toggleFavorite(fullRecipe)} 
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
           style={styles.iconButton}
         >
-          <Ionicons 
-            name={isFavorite ? "heart" : "heart-outline"} 
-            size={24} 
-            color={isFavorite ? "#FF6F61" : "#1A1A1A"} 
+          <Ionicons name="chevron-back" size={24} color="#1A1A1A" />
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => toggleFavorite(fullRecipe)}
+          style={styles.iconButton}
+        >
+          <Ionicons
+            name={isFavorite ? "heart" : "heart-outline"}
+            size={24}
+            color={isFavorite ? "#FF6F61" : "#1A1A1A"}
           />
         </TouchableOpacity>
       </View>
@@ -57,10 +62,26 @@ const DetailScreen: React.FC<{ navigation: any; route: any }> = ({ navigation, r
         {/* Content Container */}
         <View style={styles.contentCard}>
           <View style={styles.indicator} />
-          
-          <Text style={styles.categoryTag}>{fullRecipe.strCategory || "Recipe"}</Text>
+
+          <Text style={styles.categoryTag}>
+            {fullRecipe.strCategory || "Recipe"}
+          </Text>
           <Text style={styles.recipeTitle}>{fullRecipe.strMeal}</Text>
-          
+
+          <View style={styles.statsContainer}>
+            <View style={styles.statItem}>
+              <Ionicons name="time-outline" size={18} color="#FF6F61" />
+              <Text style={styles.statText}>{fullRecipe.strCookTime??"35 Minutes"}</Text>
+            </View>
+
+            <View style={styles.statItem}>
+              <Ionicons name="people-outline" size={18} color="#FF6F61" />
+              <Text style={styles.statText}>{fullRecipe.strServings??"4 Servants"}</Text>
+            </View>
+          </View>
+
+          <View style={styles.divider} />
+
           <View style={styles.divider} />
 
           {/* Ingredients Section */}
@@ -68,13 +89,14 @@ const DetailScreen: React.FC<{ navigation: any; route: any }> = ({ navigation, r
             <Ionicons name="basket-outline" size={22} color="#FF6F61" />
             <Text style={styles.sectionTitle}>Ingredients</Text>
           </View>
-          
+
           <View style={styles.ingredientsGrid}>
             {ingredients.map((ing) => (
               <View key={ing.id} style={styles.ingredientItem}>
                 <View style={styles.bullet} />
                 <Text style={styles.ingredientText}>
-                  <Text style={styles.measureText}>{ing.measure}</Text> {ing.ingredient}
+                  <Text style={styles.measureText}>{ing.measure}</Text>{" "}
+                  {ing.ingredient}
                 </Text>
               </View>
             ))}
@@ -86,9 +108,9 @@ const DetailScreen: React.FC<{ navigation: any; route: any }> = ({ navigation, r
             <Text style={styles.sectionTitle}>Instructions</Text>
           </View>
           <Text style={styles.instructionsText}>
-            {fullRecipe.strInstructions.replace(/\r\n/g, '\n')}
+            {fullRecipe.strInstructions.replace(/\r\n/g, "\n")}
           </Text>
-          
+
           <View style={{ height: 100 }} />
         </View>
       </ScrollView>
@@ -129,7 +151,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
     borderTopLeftRadius: 32,
     borderTopRightRadius: 32,
-    paddingHorizontal: 24,
+    paddingHorizontal: 16,
     paddingTop: 20,
   },
   indicator: {
@@ -153,7 +175,7 @@ const styles = StyleSheet.create({
     fontWeight: "800",
     color: "#1A1A1A",
     marginBottom: 16,
-    lineHeight:28,
+    lineHeight: 28,
   },
   divider: {
     height: 1,
@@ -209,6 +231,29 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: "#666",
   },
+  statsContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 24,
+    gap: 4,
+  },
+  statItem: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#FFF8F7", // Very light tint of your main color
+    paddingVertical: 10,
+    borderRadius: 8,
+    gap: 6,
+    borderWidth: 1,
+    borderColor: "#FFEFED",
+  },
+  statText: {
+    fontSize: 11,
+    fontWeight: "600",
+    color: "#4A4A4A",
+  }
 });
 
 export default DetailScreen;
