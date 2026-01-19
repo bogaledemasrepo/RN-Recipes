@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   ScrollView,
   View,
@@ -10,6 +10,7 @@ import {
   Dimensions,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import YoutubePlayer from "react-native-youtube-iframe"; // Import this
 import { useRecipeContext } from "../context/RecipeContext";
 import { parseIngredients } from "../utils/parseIngredient";
 
@@ -27,6 +28,18 @@ const DetailScreen: React.FC<{ navigation: any; route: any }> = ({
   const fullRecipe = recipes.find((r) => r.idMeal === recipe.idMeal) || recipe;
   const ingredients = parseIngredients(fullRecipe);
   const isFavorite = favorites.includes(fullRecipe.idMeal);
+  const [playing, setPlaying] = useState(false);
+
+  // Helper: Extracts "xcjSyakoWua" from "https://www.youtube.com/watch?v=xcjSyakoWua"
+  const getYouTubeId = (url: string) => {
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    const match = url?.match(regExp);
+    return (match && match[2].length === 11) ? match[2] : null;
+  };
+
+  const videoId = getYouTubeId(fullRecipe.strYoutube);
+
+  console.log("YouTube Video ID:", videoId, fullRecipe.strYoutube); // Debugging line
   return (
     <View style={styles.mainContainer}>
       <StatusBar barStyle="light-content" />
@@ -71,12 +84,16 @@ const DetailScreen: React.FC<{ navigation: any; route: any }> = ({
           <View style={styles.statsContainer}>
             <View style={styles.statItem}>
               <Ionicons name="time-outline" size={18} color="#FF6F61" />
-              <Text style={styles.statText}>{fullRecipe.strCookTime??"35 Minutes"}</Text>
+              <Text style={styles.statText}>
+                {fullRecipe.strCookTime ?? "35 Minutes"}
+              </Text>
             </View>
 
             <View style={styles.statItem}>
               <Ionicons name="people-outline" size={18} color="#FF6F61" />
-              <Text style={styles.statText}>{fullRecipe.strServings??"4 Servants"}</Text>
+              <Text style={styles.statText}>
+                {fullRecipe.strServings ?? "4 Servants"}
+              </Text>
             </View>
           </View>
 
@@ -110,7 +127,23 @@ const DetailScreen: React.FC<{ navigation: any; route: any }> = ({
           <Text style={styles.instructionsText}>
             {fullRecipe.strInstructions.replace(/\r\n/g, "\n")}
           </Text>
+          {/* YOUTUBE SECTION */}
+          {videoId && (
+            <View style={styles.videoSection}>
+              <View style={styles.sectionHeader}>
+                <Ionicons name="logo-youtube" size={22} color="#FF0000" />
+                <Text style={styles.sectionTitle}>Video Tutorial</Text>
+              </View>
 
+              <View style={styles.videoWrapper}>
+                <YoutubePlayer
+                  height={((width - 48) * 9) / 16} // Maintains 16:9 aspect ratio
+                  play={playing}
+                  videoId={videoId}
+                />
+              </View>
+            </View>
+          )}
           <View style={{ height: 100 }} />
         </View>
       </ScrollView>
@@ -253,7 +286,20 @@ const styles = StyleSheet.create({
     fontSize: 11,
     fontWeight: "600",
     color: "#4A4A4A",
-  }
+  },
+   videoSection: {
+    marginTop: 32,
+  },
+  videoWrapper: {
+    borderRadius: 16,
+    overflow: "hidden", // Clips the video corners to match the professional aesthetic
+    backgroundColor: "#000",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 12,
+    elevation: 5,
+  },
 });
 
 export default DetailScreen;
