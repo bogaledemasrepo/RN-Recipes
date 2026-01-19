@@ -19,6 +19,6 @@ export interface Favorite {
   strMeal: string;
   strCategory: string;
   strMealThumb: string | null;
-  firestoreId: string;
+  fireStoreId: string;
   timestamp: string;
 }

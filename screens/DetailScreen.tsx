@@ -3,10 +3,10 @@ import { ScrollView, View, Text, Image, TouchableOpacity, StyleSheet } from 'rea
 import { useRecipeContext } from '../context/RecipeContext';
 import { parseIngredients } from '../utils/mockdata';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { DetailScreenProbs } from '../AppNavigator';
+import { DetailScreenProps } from '../AppNavigator';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-const DetailScreen: React.FC<DetailScreenProbs> = ({navigation,route}) => {
+const DetailScreen: React.FC<DetailScreenProps> = ({navigation,route}) => {
   const { recipes, userId,favorites, toggleFavorite} = useRecipeContext();
   const { recipe } = route.params as unknown as { recipe: any };
   if (!recipe) return <Text style={styles.errorText}>Recipe not found.</Text>;

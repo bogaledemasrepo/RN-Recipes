@@ -8,11 +8,15 @@ export const parseIngredients = (recipe: Recipe): Ingredient[] => {
     const ingredient = recipe[ingredientKey] as string;
     const measure = recipe[measureKey] as string;
 
-    if (ingredient && ingredient.trim() !== '' && ingredient.trim() !== 'null') {
+    if (
+      ingredient &&
+      ingredient.trim() !== "" &&
+      ingredient.trim() !== "null"
+    ) {
       ingredients.push({
         id: i,
         ingredient: ingredient,
-        measure: measure ? measure : '',
+        measure: measure ? measure : "",
       });
     }
   }

@@ -8,7 +8,7 @@ import {
   onAuthStateChanged,
   UserCredential,
 } from 'firebase/auth';
-import { auth, profileCollection } from '../firebase';
+import { auth } from '../firebase';
 import { Text } from 'react-native';
 
 // 1. Define the type for the context's state and functions

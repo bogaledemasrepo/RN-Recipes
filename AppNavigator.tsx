@@ -30,8 +30,8 @@ export type AuthStackParamList = {
   Index: undefined;
 };
 export type IndexScreenProps = NativeStackScreenProps<AuthStackParamList, 'Index'>;
-export type LoginScreenProbs = NativeStackScreenProps<AuthStackParamList, 'Login'>;
-export type RegisterScreenProbs = NativeStackScreenProps<AuthStackParamList, 'Register'>;
+export type LoginScreenProps = NativeStackScreenProps<AuthStackParamList, 'Login'>;
+export type RegisterScreenProps = NativeStackScreenProps<AuthStackParamList, 'Register'>;
 
 
 // 1.2 Tab Navigator
@@ -40,9 +40,9 @@ export type TabNavigatorParamList = {
   Favorites: undefined;
   Account: undefined;
 };
-// export type HomeScreenProbs = NativeStackScreenProps<TabNavigatorParamList, 'Home'>;
-export type FavoritesScreenProbs = NativeStackScreenProps<TabNavigatorParamList, 'Favorites'>;
-export type AccountScreenProbs = NativeStackScreenProps<TabNavigatorParamList, 'Account'>;
+// export type HomeScreenProps = NativeStackScreenProps<TabNavigatorParamList, 'Home'>;
+export type FavoritesScreenProps = NativeStackScreenProps<TabNavigatorParamList, 'Favorites'>;
+export type AccountScreenProps = NativeStackScreenProps<TabNavigatorParamList, 'Account'>;
 
 
 // 1.3 Root Stack (Wraps the Tab Navigator and additional full-screen modals/details)
@@ -53,9 +53,9 @@ export type RootStackNavigatorParamList = {
 };
 // Note: React Navigation v6 NativeStackScreenProps is preferred for new stacks, 
 // but using the generic StackNavigationProp for compatibility with your createStackNavigator call
-export type RooScreenProbs = NativeStackScreenProps<RootStackNavigatorParamList, 'Root'>;
-export type SearchScreenProbs = NativeStackScreenProps<RootStackNavigatorParamList, 'Search'>;
-export type DetailScreenProbs = NativeStackScreenProps<RootStackNavigatorParamList, 'Detail'>;
+export type RootScreenProps = NativeStackScreenProps<RootStackNavigatorParamList, 'Root'>;
+export type SearchScreenProps = NativeStackScreenProps<RootStackNavigatorParamList, 'Search'>;
+export type DetailScreenProps = NativeStackScreenProps<RootStackNavigatorParamList, 'Detail'>;
 
 // Create typed instances of the navigators
 const AuthStackInstance = createStackNavigator<AuthStackParamList>();
@@ -98,7 +98,7 @@ const RootStackNavigator: FC = () => (
   </RootStackInstance.Navigator>
 );
 
-export type HomeScreenProbs = CompositeScreenProps<
+export type HomeScreenProps = CompositeScreenProps<
   BottomTabScreenProps<TabNavigatorParamList, 'Home'>, // The screen is 'Home' in the Tab Navigator
   NativeStackScreenProps<RootStackNavigatorParamList>   // The parent navigator is the Root Stack
 >;
