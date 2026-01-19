@@ -4,9 +4,10 @@ import RecipeCard from '../components/RecipeCard';
 import { useRecipeContext } from '../context/RecipeContext';
 import { Favorite, Recipe } from '../types';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import ListHeader from '../components/header';
 
 const HomeScreen: React.FC<{navigation: any}> = ({navigation}) => {
-  const { loading, userId, recipes,toggleFavorite} = useRecipeContext();
+  const { loading, recipes,toggleFavorite} = useRecipeContext();
   const handleRecipePress = (item: Recipe | Favorite) => {
     navigation.navigate('Detail',{recipe:item});
   };
@@ -23,13 +24,12 @@ const {top,bottom}=useSafeAreaInsets();
             renderItem={({ item }) => (
               <RecipeCard
                 item={item}
-                userId={userId}
                 toggleFavorite={(item)=>{new Promise((res,rej)=>{res("")})}}
                 isRecipeFavorite={()=>false}
                 onPress={()=>handleRecipePress(item)}
               />
             )}
-            ListHeaderComponent={()=>(<Text style={styles.heading}>All Recipes</Text>)}
+            ListHeaderComponent={ListHeader}
             contentContainerStyle={styles.listContent}
             ListEmptyComponent={() => (
               <View style={styles.emptyContainer}>
