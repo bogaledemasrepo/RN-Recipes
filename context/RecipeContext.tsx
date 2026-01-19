@@ -6,11 +6,9 @@ import React, {
   useState,
 } from "react";
 import { Recipe, Favorite } from "../types";
-import { useAuth } from "./AuthContext";
 
 interface RecipeContextType {
   recipes: Recipe[];
-  userId: string | null;
   toggleFavorite: (value: Favorite) => void;
   loading: boolean;
   favorites: Favorite[];
@@ -31,7 +29,6 @@ export const useRecipeContext = () => {
 };
 
 const RecipesProvider = ({ children }: { children: ReactNode }) => {
-  const { currentUser } = useAuth();
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [favorites, setFavorites] = useState<Favorite[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -61,7 +58,6 @@ const RecipesProvider = ({ children }: { children: ReactNode }) => {
         favorites,
         toggleFavorite,
         loading,
-        userId: currentUser?.uid || null,
       }}
     >
       {children}

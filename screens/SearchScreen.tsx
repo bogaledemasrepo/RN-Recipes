@@ -3,30 +3,23 @@ import { View, Text, TextInput, TouchableOpacity, FlatList, ActivityIndicator, S
 import { useNavigation } from '@react-navigation/native';
 import RecipeCard from '../components/RecipeCard';
 import { useRecipeContext } from '../context/RecipeContext';
-import { MOCK_RECIPES } from '../utils/mockdata';
+import { Recipe, Favorite } from '../types';
 
 const SearchScreen: React.FC = () => {
-  const { recipes, setRecipes, userId, toggleFavorite, isRecipeFavorite } = useRecipeContext();
+  const { recipes, userId, toggleFavorite } = useRecipeContext();
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const navigation = useNavigation();
 
   const handleSearch = useCallback(async (query: string) => {
     if (!query.trim()) {
-      setRecipes([]);
       return;
     }
     setIsLoading(true);
     const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
     await delay(1500);
-    const results = MOCK_RECIPES.filter(r =>
-      r.strMeal.toLowerCase().includes(query.toLowerCase()) ||
-      (r.strIngredient1 && r.strIngredient1.toLowerCase().includes(query.toLowerCase())) ||
-      (r.strIngredient2 && r.strIngredient2.toLowerCase().includes(query.toLowerCase()))
-    );
-    setRecipes(results);
     setIsLoading(false);
-  }, [setRecipes]);
+  }, []);
 
   const handleRecipePress = (item: any) => {
     // navigation.navigate('Detail', { recipe: item });
@@ -63,10 +56,10 @@ const SearchScreen: React.FC = () => {
           <RecipeCard
             item={item}
             userId={userId}
-            toggleFavorite={toggleFavorite}
-            isRecipeFavorite={isRecipeFavorite}
-            onPress={handleRecipePress}
-          />
+            isRecipeFavorite={() => false}
+            onPress={handleRecipePress} toggleFavorite={function (recipe: Recipe | Favorite): void {
+              throw new Error('Function not implemented.');
+            } }          />
         )}
         contentContainerStyle={styles.listContent}
         ListEmptyComponent={() => (

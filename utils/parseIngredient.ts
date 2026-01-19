@@ -1,4 +1,4 @@
-import { Ingredient, Recipe } from "../types";
+import { Recipe, Ingredient } from '../types';
 
 export const parseIngredients = (recipe: Recipe): Ingredient[] => {
   const ingredients: Ingredient[] = [];
@@ -7,16 +7,11 @@ export const parseIngredients = (recipe: Recipe): Ingredient[] => {
     const measureKey = `strMeasure${i}`;
     const ingredient = recipe[ingredientKey] as string;
     const measure = recipe[measureKey] as string;
-
-    if (
-      ingredient &&
-      ingredient.trim() !== "" &&
-      ingredient.trim() !== "null"
-    ) {
+    if (ingredient && ingredient.trim() !== '' && ingredient.trim() !== 'null') {
       ingredients.push({
         id: i,
         ingredient: ingredient,
-        measure: measure ? measure : "",
+        measure: measure ? measure : '',
       });
     }
   }

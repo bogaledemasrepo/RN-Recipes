@@ -2,18 +2,17 @@ import React from 'react';
 import { View, Text, FlatList, ActivityIndicator, StyleSheet } from 'react-native';
 import RecipeCard from '../components/RecipeCard';
 import { useRecipeContext } from '../context/RecipeContext';
-import { HomeScreenProps } from '../AppNavigator';
 import { Favorite, Recipe } from '../types';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
+const HomeScreen: React.FC<{navigation: any}> = ({navigation}) => {
   const { loading, userId, recipes,toggleFavorite} = useRecipeContext();
   const handleRecipePress = (item: Recipe | Favorite) => {
     navigation.navigate('Detail',{recipe:item});
   };
-const {top}=useSafeAreaInsets();
+const {top,bottom}=useSafeAreaInsets();
   return (  
-    <View style={[ styles.screenContainer,{paddingTop:top}]}>
+    <View style={[ styles.screenContainer,{paddingTop:top,paddingBottom:bottom}]}>
       {loading ? (
         <ActivityIndicator size="large" color="#FF6F61" style={styles.loadingIndicator} />
       ) : (

@@ -1,54 +1,64 @@
-import React from 'react';
-import { ScrollView, View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
-import { useRecipeContext } from '../context/RecipeContext';
-import { parseIngredients } from '../utils/mockdata';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { DetailScreenProps } from '../AppNavigator';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import React from "react";
+import {
+  ScrollView,
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  StyleSheet,
+} from "react-native";
+import { useRecipeContext } from "../context/RecipeContext";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { parseIngredients } from "../utils/parseIngredient";
 
-const DetailScreen: React.FC<DetailScreenProps> = ({navigation,route}) => {
-  const { recipes, userId,favorites, toggleFavorite} = useRecipeContext();
+const DetailScreen: React.FC<{ navigation: any; route: any }> = ({ route }) => {
+  const { recipes, userId, favorites, toggleFavorite } = useRecipeContext();
   const { recipe } = route.params as unknown as { recipe: any };
   if (!recipe) return <Text style={styles.errorText}>Recipe not found.</Text>;
 
-  const fullRecipe = recipes.find(r => r.idMeal === recipe.idMeal) || recipe;
+  const fullRecipe = recipes.find((r) => r.idMeal === recipe.idMeal) || recipe;
   const ingredients = parseIngredients(fullRecipe);
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <View style={{width:"100%",height:60,backgroundColor:"#D32F2F",display:"flex",alignItems:"center",justifyContent:"center",flexDirection:"row",position:"relative"}}>
-        <MaterialCommunityIcons name='arrow-left-bold-box-outline' size={36} color={"#ffffffbd"} style={{position:"absolute",left:0}} onPress={()=>navigation.goBack()} />
-         <Text style={styles.detailTitle}>{fullRecipe.strMeal}</Text>
-         <View></View>
-      </View>
-    <ScrollView style={styles.screenContainer} contentContainerStyle={styles.detailScrollContent}>
-      <Text style={styles.detailCategory}>{fullRecipe.strCategory} | {fullRecipe.strArea || 'N/A'}</Text>
-      <View style={styles.imageContainer}>
-        <Image
-          style={styles.detailImage}
-          source={{ uri: fullRecipe.strMealThumb || 'https://placehold.co/300x200/CCCCCC/333333?text=No+Image' }}
-          resizeMode="cover"
-        />
-      </View>
-      <TouchableOpacity
-        style={[styles.detailFavoriteButton,styles.detailFavoriteButtonRed]}
-        onPress={() => toggleFavorite(fullRecipe)}
-        disabled={!userId}
+      <ScrollView
+        style={styles.screenContainer}
+        contentContainerStyle={styles.detailScrollContent}
       >
-        <Text style={styles.detailFavoriteText}>
-          {favorites.includes(fullRecipe.idMeal) ? '❤️ Remove from Favorites' : '🤍 Add to Favorites'}
+        <View style={styles.imageContainer}>
+          <Image
+            style={styles.detailImage}
+            source={{
+              uri:
+                fullRecipe.strMealThumb ||
+                "https://placehold.co/300x200/CCCCCC/333333?text=No+Image",
+            }}
+            resizeMode="cover"
+          />
+        </View>
+        <TouchableOpacity
+          style={[styles.detailFavoriteButton, styles.detailFavoriteButtonRed]}
+          onPress={() => toggleFavorite(fullRecipe)}
+          disabled={!userId}
+        >
+          <Text style={styles.detailFavoriteText}>
+            {favorites.includes(fullRecipe.idMeal)
+              ? "❤️ Remove from Favorites"
+              : "🤍 Add to Favorites"}
+          </Text>
+        </TouchableOpacity>
+        <Text style={styles.sectionTitle}>Ingredients:</Text>
+        {ingredients.map((ing) => (
+          <Text key={ing.id} style={styles.listItem}>
+            {`\u2022 ${ing.measure} ${ing.ingredient}`}
+          </Text>
+        ))}
+        <Text style={styles.sectionTitle}>Instructions:</Text>
+        <Text style={styles.instructionsText}>
+          {fullRecipe.strInstructions}
         </Text>
-      </TouchableOpacity>
-      <Text style={styles.sectionTitle}>Ingredients:</Text>
-      {ingredients.map((ing) => (
-        <Text key={ing.id} style={styles.listItem}>
-          {`\u2022 ${ing.measure} ${ing.ingredient}`}
-        </Text>
-      ))}
-      <Text style={styles.sectionTitle}>Instructions:</Text>
-      <Text style={styles.instructionsText}>{fullRecipe.strInstructions}</Text>
-      <View style={{ height: 50 }} />
-    </ScrollView>
+        <View style={{ height: 50 }} />
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -56,7 +66,7 @@ const DetailScreen: React.FC<DetailScreenProps> = ({navigation,route}) => {
 const styles = StyleSheet.create({
   screenContainer: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: "#F5F5F5",
     paddingHorizontal: 16,
   },
   detailScrollContent: {
@@ -65,60 +75,60 @@ const styles = StyleSheet.create({
   },
   detailTitle: {
     fontSize: 24,
-    fontWeight: 'bold',
-    color: '#ffffffbd',
+    fontWeight: "bold",
+    color: "#ffffffbd",
   },
   detailCategory: {
     fontSize: 16,
-    color: '#666',
+    color: "#666",
     marginBottom: 16,
   },
   imageContainer: {
-    alignItems: 'center',
+    alignItems: "center",
     marginBottom: 16,
   },
   detailImage: {
-    width: '100%',
+    width: "100%",
     height: 200,
     borderRadius: 8,
   },
   detailFavoriteButton: {
-    backgroundColor: '#FF6F61',
+    backgroundColor: "#FF6F61",
     paddingVertical: 12,
     paddingHorizontal: 20,
     borderRadius: 8,
-    alignItems: 'center',
+    alignItems: "center",
     marginBottom: 16,
   },
   detailFavoriteButtonRed: {
-    backgroundColor: '#D32F2F',
+    backgroundColor: "#D32F2F",
   },
   detailFavoriteText: {
-    color: '#FFFFFF',
+    color: "#FFFFFF",
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   sectionTitle: {
     fontSize: 20,
-    fontWeight: '600',
-    color: '#333',
+    fontWeight: "600",
+    color: "#333",
     marginTop: 16,
     marginBottom: 8,
   },
   listItem: {
     fontSize: 16,
-    color: '#333',
+    color: "#333",
     marginBottom: 4,
   },
   instructionsText: {
     fontSize: 16,
-    color: '#333',
+    color: "#333",
     lineHeight: 24,
   },
   errorText: {
     fontSize: 16,
-    color: '#FF0000',
-    textAlign: 'center',
+    color: "#FF0000",
+    textAlign: "center",
     marginTop: 20,
   },
 });

@@ -1,16 +1,13 @@
-import React from 'react'
-import AppNavigator from './AppNavigator'
-import { AuthProvider } from './context/AuthContext'
-import RecipesProvider from './context/RecipeContext'
+import React from "react";
+import AppNavigator from "./AppNavigator";
+import RecipesProvider from "./context/RecipeContext";
 
 const App = () => {
   return (
-    <AuthProvider>
-      <RecipesProvider>
-        <AppNavigator/>
-      </RecipesProvider>
-    </AuthProvider>
-  )
-}
+    <RecipesProvider>
+      <AppNavigator />
+    </RecipesProvider>
+  );
+};
 
-export default App
+export default App;

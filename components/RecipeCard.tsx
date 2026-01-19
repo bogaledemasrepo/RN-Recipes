@@ -5,7 +5,6 @@ import { MaterialIcons } from "@expo/vector-icons";
 
 interface RecipeCardProps {
   item: Recipe | Favorite;
-  userId: string | null;
   toggleFavorite: (recipe: Recipe | Favorite) => void;
   isRecipeFavorite: (recipeId: string) => boolean;
   onPress: (item: Recipe | Favorite) => void;
@@ -13,9 +12,7 @@ interface RecipeCardProps {
 
 const RecipeCard: React.FC<RecipeCardProps> = ({
   item,
-  userId,
   toggleFavorite,
-  isRecipeFavorite,
   onPress,
 }) => (
   <TouchableOpacity style={styles.card} onPress={() => onPress(item)}>
@@ -33,11 +30,9 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
         {item.strMeal}
       </Text>
       <Text style={styles.cardSubtitle}>{item.strCategory}</Text>
-      <Text style={styles.userIdText}>
-        User: {userId ? userId.substring(0, 8) + "..." : "Loading"}
-      </Text>
+      <Text style={styles.userIdText}>{item.timestamp}</Text>
     </View>
-    <TouchableOpacity onPress={() => toggleFavorite(item)} disabled={!userId}>
+    <TouchableOpacity onPress={() => toggleFavorite(item)}>
       <MaterialIcons name="favorite-outline" size={20} color={"#8f8f8f40"} />
     </TouchableOpacity>
   </TouchableOpacity>
@@ -75,7 +70,7 @@ const styles = StyleSheet.create({
   cardSubtitle: {
     fontSize: 12,
     fontWeight: "500",
-    color: "#666",
+    color: "#888",
     marginTop: 4,
   },
   userIdText: {
