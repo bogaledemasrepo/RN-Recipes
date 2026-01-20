@@ -5,9 +5,10 @@ import { useRecipeContext } from '../context/RecipeContext';
 import { Favorite, Recipe } from '../types';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import ListHeader from '../components/header';
+import EmptyState from '../components/ListEmpity';
 
 const HomeScreen: React.FC<{navigation: any}> = ({navigation}) => {
-  const { loading, recipes,toggleFavorite} = useRecipeContext();
+  const { loading, recipes,toggleFavorite,getRecipes} = useRecipeContext();
   const handleRecipePress = (item: Recipe | Favorite) => {
     navigation.navigate('Detail',{recipe:item});
   };
@@ -17,11 +18,10 @@ const HomeScreen: React.FC<{navigation: any}> = ({navigation}) => {
 const {top,bottom}=useSafeAreaInsets();
   return (  
     <View style={[ styles.screenContainer,{paddingTop:top,paddingBottom:bottom}]}>
-      {loading ? (
-        <ActivityIndicator size="large" color="#FF6F61" style={styles.loadingIndicator} />
-      ) : (
-        <>
+      
           <FlatList
+            refreshing={loading}
+            onRefresh={getRecipes}
             data={recipes}
             keyExtractor={(item) => item.idMeal}
             renderItem={({ item }) => (
@@ -33,15 +33,9 @@ const {top,bottom}=useSafeAreaInsets();
             )}
             ListHeaderComponent={()=><ListHeader onFavoritePress={handleFavoritePress} />}
             contentContainerStyle={styles.listContent}
-            ListEmptyComponent={() => (
-              <View style={styles.emptyContainer}>
-                <Text style={styles.emptyText}>You haven't saved any favorites yet!</Text>
-              </View>
-            )}
+            ListEmptyComponent={EmptyState}
             style={{ flex: 1 }}
           />
-        </>
-      )}
     </View>
   );
 };

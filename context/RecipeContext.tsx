@@ -13,6 +13,7 @@ interface RecipeContextType {
   recipes: Recipe[];
   toggleFavorite: (value: Recipe) => void;
   loading: boolean;
+  getRecipes:()=>void;
   favorites: Recipe[];
 }
 
@@ -86,6 +87,7 @@ const RecipesProvider = ({ children }: { children: ReactNode }) => {
         recipes,
         favorites,
         toggleFavorite,
+        getRecipes,
         loading,
       }}
     >

@@ -9,6 +9,7 @@ import {
 import RecipeCard from "../components/RecipeCard";
 import { useRecipeContext } from "../context/RecipeContext";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import EmptyState from "../components/ListEmpity";
 
 const FavoritesScreen: React.FC<{navigation: any}> = ({navigation}:{navigation: any}) => {
   const {top,bottom}=useSafeAreaInsets();
@@ -39,13 +40,7 @@ const FavoritesScreen: React.FC<{navigation: any}> = ({navigation}:{navigation: 
               />
             )}
             contentContainerStyle={styles.listContent}
-            ListEmptyComponent={() => (
-              <View style={styles.emptyContainer}>
-                <Text style={styles.emptyText}>
-                  You haven't saved any favorites yet!
-                </Text>
-              </View>
-            )}
+            ListEmptyComponent={EmptyState}
             style={{ flex: 1 }}
           />
         </>
