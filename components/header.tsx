@@ -29,7 +29,6 @@ const ListHeader = ({onFavoritePress}:{onFavoritePress: () => void}) => {
 const styles = StyleSheet.create({
   headerContainer: {
     width: "100%",
-    paddingHorizontal: 20,
     paddingVertical: 16,
     flexDirection: "row",
     alignItems: "center",
@@ -43,6 +42,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 12,
+    paddingHorizontal:16
   },
   iconBackground: {
     backgroundColor: "#FFF0EE",
