@@ -5,7 +5,7 @@ import { useRecipeContext } from '../context/RecipeContext';
 import { Favorite, Recipe } from '../types';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import ListHeader from '../components/header';
-import EmptyState from '../components/ListEmpity';
+import EmptyState from '../components/ListEmpty';
 
 const HomeScreen: React.FC<{navigation: any}> = ({navigation}) => {
   const { loading, recipes,toggleFavorite,getRecipes} = useRecipeContext();
@@ -20,6 +20,7 @@ const {top,bottom}=useSafeAreaInsets();
     <View style={[ styles.screenContainer,{paddingTop:top,paddingBottom:bottom}]}>
       
           <FlatList
+            showsVerticalScrollIndicator={false}
             refreshing={loading}
             onRefresh={getRecipes}
             data={recipes}

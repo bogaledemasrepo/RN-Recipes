@@ -9,7 +9,7 @@ import {
 import RecipeCard from "../components/RecipeCard";
 import { useRecipeContext } from "../context/RecipeContext";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import EmptyState from "../components/ListEmpity";
+import EmptyState from "../components/ListEmpty";
 
 const FavoritesScreen: React.FC<{navigation: any}> = ({navigation}:{navigation: any}) => {
   const {top,bottom}=useSafeAreaInsets();
@@ -21,15 +21,9 @@ const FavoritesScreen: React.FC<{navigation: any}> = ({navigation}:{navigation: 
 
   return (
     <View style={[styles.screenContainer,{paddingTop:top,paddingBottom:bottom}]}>
-      {loading ? (
-        <ActivityIndicator
-          size="large"
-          color="#FF6F61"
-          style={styles.loadingIndicator}
-        />
-      ) : (
-        <>
           <FlatList
+          showsVerticalScrollIndicator={false}
+          refreshing={loading}
             data={favorites}
             keyExtractor={(item) => item.idMeal}
             renderItem={({ item }) => (
@@ -43,8 +37,6 @@ const FavoritesScreen: React.FC<{navigation: any}> = ({navigation}:{navigation: 
             ListEmptyComponent={EmptyState}
             style={{ flex: 1 }}
           />
-        </>
-      )}
     </View>
   );
 };
