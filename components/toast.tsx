@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { Animated, View, Text, StyleSheet } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 const SuccessToast = ({ visible, message, onHide }: { visible: boolean, message: string, onHide: () => void }) => {
   const opacity = useRef(new Animated.Value(0)).current;

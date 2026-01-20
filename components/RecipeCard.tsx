@@ -1,8 +1,7 @@
 import React, { useEffect } from "react";
 import { TouchableOpacity, View, Text, Image, StyleSheet } from "react-native";
 import { Recipe } from "../types";
-import { MaterialIcons } from "@expo/vector-icons";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { useRecipeContext } from "../context/RecipeContext";
 
 interface RecipeCardProps {
@@ -47,7 +46,7 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
         <Text style={styles.userIdText}>{item.timestamp}</Text>
       </View>
       <TouchableOpacity onPress={handleSetFavorite}>
-        <MaterialIcons name={isFavorite ? "favorite" : "favorite-outline"} size={20} color={isFavorite ? "#FF6F61" : "#8f8f8f40"} />
+        <MaterialCommunityIcons name={isFavorite ? "heart-minus-outline" : "heart-plus-outline"} size={20} color={isFavorite ? "#FF6F61" : "#8f8f8f40"} />
       </TouchableOpacity>
     </TouchableOpacity>
   );

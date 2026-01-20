@@ -1,6 +1,8 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { MaterialCommunityIcons, AntDesign } from "@expo/vector-icons";
+
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import AntDesign from '@expo/vector-icons/AntDesign';
 
 const ListHeader = ({onFavoritePress}:{onFavoritePress: () => void}) => {
   return (
