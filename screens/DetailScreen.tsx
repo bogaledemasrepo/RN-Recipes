@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   StatusBar,
-  Dimensions,
+  Dimensions,Share, Alert
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import YoutubePlayer from "react-native-youtube-iframe"; // Import this
@@ -37,6 +37,19 @@ const DetailScreen: React.FC<{ navigation: any; route: any }> = ({
     return (match && match[2].length === 11) ? match[2] : null;
   };
 
+// ... inside the component
+const onShare = async () => {
+  try {
+    const result = await Share.share({
+      message: `Check out this amazing ${fullRecipe.strMeal} recipe! \n\nWatch it here: ${fullRecipe.strYoutube}`,
+      url: fullRecipe.strYoutube, // iOS support for link preview
+      title: `Recipe: ${fullRecipe.strMeal}`,
+    });
+  } catch (error: any) {
+    Alert.alert("Error", "Could not share the recipe");
+  }
+};
+
   const videoId = getYouTubeId(fullRecipe.strYoutube);
 
   return (
@@ -44,24 +57,28 @@ const DetailScreen: React.FC<{ navigation: any; route: any }> = ({
       <StatusBar barStyle="light-content" />
 
       {/* Floating Header Buttons */}
-      <View style={styles.headerOverlay}>
-        <TouchableOpacity
-          onPress={() => navigation.goBack()}
-          style={styles.iconButton}
-        >
-          <Ionicons name="chevron-back" size={24} color="#1A1A1A" />
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => toggleFavorite(fullRecipe)}
-          style={styles.iconButton}
-        >
-          <Ionicons
-            name={isFavorite ? "heart" : "heart-outline"}
-            size={24}
-            color={isFavorite ? "#FF6F61" : "#1A1A1A"}
-          />
-        </TouchableOpacity>
-      </View>
+<View style={styles.headerOverlay}>
+  <TouchableOpacity onPress={() => navigation.goBack()} style={styles.iconButton}>
+    <Ionicons name="chevron-back" size={24} color="#1A1A1A" />
+  </TouchableOpacity>
+
+  <View style={styles.rightHeaderButtons}>
+    <TouchableOpacity onPress={onShare} style={styles.iconButton}>
+      <Ionicons name="share-outline" size={22} color="#1A1A1A" />
+    </TouchableOpacity>
+    
+    <TouchableOpacity 
+      onPress={() => toggleFavorite(fullRecipe)} 
+      style={styles.iconButton}
+    >
+      <Ionicons 
+        name={isFavorite ? "heart" : "heart-outline"} 
+        size={24} 
+        color={isFavorite ? "#FF6F61" : "#1A1A1A"} 
+      />
+    </TouchableOpacity>
+  </View>
+</View>
 
       <ScrollView showsVerticalScrollIndicator={false} bounces={false}>
         {/* Full-width Image */}
@@ -154,25 +171,6 @@ const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     backgroundColor: "#FFFFFF",
-  },
-  headerOverlay: {
-    position: "absolute",
-    top: 50,
-    left: 20,
-    right: 20,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    zIndex: 10,
-  },
-  iconButton: {
-    backgroundColor: "rgba(255, 255, 255, 0.9)",
-    padding: 10,
-    borderRadius: 12,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 5,
   },
   heroImage: {
     width: width,
@@ -298,6 +296,34 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 12,
     elevation: 5,
+  },
+  headerOverlay: {
+    position: "absolute",
+    top: 50,
+    left: 20,
+    right: 20,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    zIndex: 10,
+  },
+  rightHeaderButtons: {
+    flexDirection: "row",
+    gap: 12, // Space between share and heart buttons
+  },
+  iconButton: {
+    backgroundColor: "rgba(255, 255, 255, 0.95)", // Slightly more opaque for better legibility
+    width: 44, // Uniform size for all header buttons
+    height: 44,
+    borderRadius: 14,
+    alignItems: "center",
+    justifyContent: "center",
+    // Premium soft shadow
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 4,
   },
 });
 
