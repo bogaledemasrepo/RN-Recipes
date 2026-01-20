@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import { Recipe, Favorite } from "../types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import SuccessToast from "../components/toast";
 
 interface RecipeContextType {
   recipes: Recipe[];
@@ -33,6 +34,9 @@ const RecipesProvider = ({ children }: { children: ReactNode }) => {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [favorites, setFavorites] = useState<Recipe[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [showToast, setShowToast] = React.useState(false);
+  const [toastMessage, setToastMessage] = React.useState("");
+
   async function getRecipes() {
     setLoading(true);
     try {
@@ -53,7 +57,7 @@ const RecipesProvider = ({ children }: { children: ReactNode }) => {
       if (data) {
         setFavorites(JSON.parse(data));
       }
-    }); 
+    });
   };
   const toggleFavorite = (value: Recipe) => {
     let updatedFavorites: Recipe[] = [];
@@ -61,8 +65,12 @@ const RecipesProvider = ({ children }: { children: ReactNode }) => {
       updatedFavorites = favorites.filter(
         (item) => item.idMeal !== value.idMeal,
       );
+      setToastMessage("Added to Favorites");
+      setShowToast(true);
     } else {
       updatedFavorites = [...favorites, value];
+      setToastMessage("Removed from Favorites");
+      setShowToast(true);
     }
     setFavorites(updatedFavorites);
     AsyncStorage.setItem("favorites", JSON.stringify(updatedFavorites));
@@ -71,7 +79,7 @@ const RecipesProvider = ({ children }: { children: ReactNode }) => {
     getRecipes();
     getFavorites();
   }, []);
-  
+
   return (
     <RecipeContext.Provider
       value={{
@@ -82,6 +90,11 @@ const RecipesProvider = ({ children }: { children: ReactNode }) => {
       }}
     >
       {children}
+      <SuccessToast
+        visible={showToast}
+        message={toastMessage}
+        onHide={() => setShowToast(false)}
+      />
     </RecipeContext.Provider>
   );
 };
