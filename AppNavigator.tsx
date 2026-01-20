@@ -15,6 +15,10 @@ export type RootStackParamList = {
 export type HomeScreenProps = {
   navigation: any;
 };
+
+export type FavoritesScreenProps = {
+  navigation: any;
+};
 const AppNavigator: FC = () => {
   const Stack = createStackNavigator<RootStackParamList>();
 

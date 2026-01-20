@@ -11,6 +11,9 @@ const HomeScreen: React.FC<{navigation: any}> = ({navigation}) => {
   const handleRecipePress = (item: Recipe | Favorite) => {
     navigation.navigate('Detail',{recipe:item});
   };
+    const handleFavoritePress = () => {
+    navigation.navigate('Favorites');
+  };
 const {top,bottom}=useSafeAreaInsets();
   return (  
     <View style={[ styles.screenContainer,{paddingTop:top,paddingBottom:bottom}]}>
@@ -24,12 +27,11 @@ const {top,bottom}=useSafeAreaInsets();
             renderItem={({ item }) => (
               <RecipeCard
                 item={item}
-                toggleFavorite={(item)=>{new Promise((res,rej)=>{res("")})}}
-                isRecipeFavorite={()=>false}
+                toggleFavorite={toggleFavorite}
                 onPress={()=>handleRecipePress(item)}
               />
             )}
-            ListHeaderComponent={ListHeader}
+            ListHeaderComponent={()=><ListHeader onFavoritePress={handleFavoritePress} />}
             contentContainerStyle={styles.listContent}
             ListEmptyComponent={() => (
               <View style={styles.emptyContainer}>

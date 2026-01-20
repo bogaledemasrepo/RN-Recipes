@@ -6,12 +6,13 @@ import React, {
   useState,
 } from "react";
 import { Recipe, Favorite } from "../types";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface RecipeContextType {
   recipes: Recipe[];
-  toggleFavorite: (value: Favorite) => void;
+  toggleFavorite: (value: Recipe) => void;
   loading: boolean;
-  favorites: Favorite[];
+  favorites: Recipe[];
 }
 
 export const RecipeContext = createContext<RecipeContextType | undefined>(
@@ -30,27 +31,47 @@ export const useRecipeContext = () => {
 
 const RecipesProvider = ({ children }: { children: ReactNode }) => {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
-  const [favorites, setFavorites] = useState<Favorite[]>([]);
+  const [favorites, setFavorites] = useState<Recipe[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  useEffect(() => {
+  async function getRecipes() {
     setLoading(true);
     try {
-      async function getRecipes() {
-        const response = await fetch(
-          "https://www.themealdb.com/api/json/v1/1/search.php?f=b",
-        );
-        const data = (await response.json()) as { meals: Recipe[] };
-        setLoading(false);
-        setRecipes(data.meals);
-      }
-      getRecipes();
+      const response = await fetch(
+        "https://www.themealdb.com/api/json/v1/1/search.php?f=b",
+      );
+      const data = (await response.json()) as { meals: Recipe[] };
+      setLoading(false);
+      setRecipes(data.meals);
     } catch (error) {
       setLoading(false);
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
+  }
+  const getFavorites = async () => {
+    AsyncStorage.getItem("favorites").then((data) => {
+      if (data) {
+        setFavorites(JSON.parse(data));
+      }
+    }); 
+  };
+  const toggleFavorite = (value: Recipe) => {
+    let updatedFavorites: Recipe[] = [];
+    if (favorites.find((item) => item.idMeal === value.idMeal)) {
+      updatedFavorites = favorites.filter(
+        (item) => item.idMeal !== value.idMeal,
+      );
+    } else {
+      updatedFavorites = [...favorites, value];
+    }
+    setFavorites(updatedFavorites);
+    AsyncStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+  };
+  useEffect(() => {
+    getRecipes();
+    getFavorites();
   }, []);
-  const toggleFavorite = (value: Favorite) => {};
+  
   return (
     <RecipeContext.Provider
       value={{

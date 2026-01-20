@@ -2,7 +2,7 @@ import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { MaterialCommunityIcons, AntDesign } from "@expo/vector-icons";
 
-const ListHeader = () => {
+const ListHeader = ({onFavoritePress}:{onFavoritePress: () => void}) => {
   return (
     <View style={styles.headerContainer}>
       <View style={styles.leftSection}>
@@ -19,7 +19,7 @@ const ListHeader = () => {
         </View>
       </View>
 
-      <TouchableOpacity style={styles.favoriteButton} activeOpacity={0.7}>
+      <TouchableOpacity onPress={onFavoritePress} style={styles.favoriteButton} activeOpacity={0.7}>
         <AntDesign name="heart" size={22} color="#666" />
       </TouchableOpacity>
     </View>

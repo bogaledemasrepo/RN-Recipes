@@ -39,7 +39,6 @@ const DetailScreen: React.FC<{ navigation: any; route: any }> = ({
 
   const videoId = getYouTubeId(fullRecipe.strYoutube);
 
-  console.log("YouTube Video ID:", videoId, fullRecipe.strYoutube); // Debugging line
   return (
     <View style={styles.mainContainer}>
       <StatusBar barStyle="light-content" />

@@ -8,16 +8,18 @@ import {
 } from "react-native";
 import RecipeCard from "../components/RecipeCard";
 import { useRecipeContext } from "../context/RecipeContext";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-const FavoritesScreen: React.FC = () => {
-  const { loading, favorites } = useRecipeContext();
+const FavoritesScreen: React.FC<{navigation: any}> = ({navigation}:{navigation: any}) => {
+  const {top,bottom}=useSafeAreaInsets();
+  const { loading, favorites ,toggleFavorite} = useRecipeContext();
 
-  const handleRecipePress = () => {
-    // navigation.navigate('Detail', { recipe: item });
+  const handleRecipePress = (item: any) => {
+    navigation.navigate('Detail', { recipe: item });
   };
 
   return (
-    <View style={styles.screenContainer}>
+    <View style={[styles.screenContainer,{paddingTop:top,paddingBottom:bottom}]}>
       {loading ? (
         <ActivityIndicator
           size="large"
@@ -32,12 +34,7 @@ const FavoritesScreen: React.FC = () => {
             renderItem={({ item }) => (
               <RecipeCard
                 item={item}
-                toggleFavorite={() => {
-                  new Promise((res) => {
-                    res("");
-                  });
-                }}
-                isRecipeFavorite={() => false}
+                toggleFavorite={toggleFavorite}
                 onPress={handleRecipePress}
               />
             )}
@@ -61,7 +58,7 @@ const styles = StyleSheet.create({
   screenContainer: {
     flex: 1,
     backgroundColor: "#F5F5F5",
-    paddingHorizontal: 16,
+    paddingHorizontal: 12,
     paddingTop: 20,
   },
   heading: {

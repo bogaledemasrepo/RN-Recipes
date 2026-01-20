@@ -1,42 +1,57 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { TouchableOpacity, View, Text, Image, StyleSheet } from "react-native";
-import { Recipe, Favorite } from "../types";
+import { Recipe } from "../types";
 import { MaterialIcons } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface RecipeCardProps {
-  item: Recipe | Favorite;
-  toggleFavorite: (recipe: Recipe | Favorite) => void;
-  isRecipeFavorite: (recipeId: string) => boolean;
-  onPress: (item: Recipe | Favorite) => void;
+  item: Recipe;
+  toggleFavorite: (recipe: Recipe) => void;
+  onPress: (item: Recipe) => void;
 }
 
 const RecipeCard: React.FC<RecipeCardProps> = ({
   item,
   toggleFavorite,
   onPress,
-}) => (
-  <TouchableOpacity style={styles.card} onPress={() => onPress(item)}>
-    <Image
-      style={styles.cardImage}
-      source={{
-        uri:
-          item.strMealThumb ||
-          "https://placehold.co/60x60/CCCCCC/333333?text=N/A",
-      }}
-      resizeMode="cover"
-    />
-    <View style={styles.cardContent}>
-      <Text style={styles.cardTitle} numberOfLines={1}>
-        {item.strMeal}
-      </Text>
-      <Text style={styles.cardSubtitle}>{item.strCategory}</Text>
-      <Text style={styles.userIdText}>{item.timestamp}</Text>
-    </View>
-    <TouchableOpacity onPress={() => toggleFavorite(item)}>
-      <MaterialIcons name="favorite-outline" size={20} color={"#8f8f8f40"} />
+}) => {
+  const [isFavorite, setIsFavorite] = React.useState(false);
+  const checkIfFavorite = (item: Recipe) => { 
+    AsyncStorage.getItem("favorites").then((data) => {
+      if (data) {
+        const favorites: Recipe[] = JSON.parse(data);
+        setIsFavorite(favorites.some((fav) => fav.idMeal === item.idMeal));
+      }
+    });
+    setIsFavorite(false);
+  }
+  useEffect(() => {
+    checkIfFavorite(item)
+  }, []);
+  return (
+    <TouchableOpacity style={styles.card} onPress={() => onPress(item)}>
+      <Image
+        style={styles.cardImage}
+        source={{
+          uri:
+            item.strMealThumb ||
+            "https://placehold.co/60x60/CCCCCC/333333?text=N/A",
+        }}
+        resizeMode="cover"
+      />
+      <View style={styles.cardContent}>
+        <Text style={styles.cardTitle} numberOfLines={1}>
+          {item.strMeal}
+        </Text>
+        <Text style={styles.cardSubtitle}>{item.strCategory}</Text>
+        <Text style={styles.userIdText}>{item.timestamp}</Text>
+      </View>
+      <TouchableOpacity onPress={() => toggleFavorite(item)}>
+        <MaterialIcons name={isFavorite ? "favorite" : "favorite-outline"} size={20} color={isFavorite ? "#FF6F61" : "#8f8f8f40"} />
+      </TouchableOpacity>
     </TouchableOpacity>
-  </TouchableOpacity>
-);
+  );
+};
 
 const styles = StyleSheet.create({
   card: {
