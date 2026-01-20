@@ -3,6 +3,7 @@ import { TouchableOpacity, View, Text, Image, StyleSheet } from "react-native";
 import { Recipe } from "../types";
 import { MaterialIcons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useRecipeContext } from "../context/RecipeContext";
 
 interface RecipeCardProps {
   item: Recipe;
@@ -15,15 +16,10 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
   toggleFavorite,
   onPress,
 }) => {
+  const {favorites}=useRecipeContext();
   const [isFavorite, setIsFavorite] = React.useState(false);
   const checkIfFavorite = (item: Recipe) => { 
-    AsyncStorage.getItem("favorites").then((data) => {
-      if (data) {
-        const favorites: Recipe[] = JSON.parse(data);
-        setIsFavorite(favorites.some((fav) => fav.idMeal === item.idMeal));
-      }
-    });
-    setIsFavorite(false);
+    setIsFavorite(favorites.some((fav) => fav.idMeal === item.idMeal));
   }
   useEffect(() => {
     checkIfFavorite(item)

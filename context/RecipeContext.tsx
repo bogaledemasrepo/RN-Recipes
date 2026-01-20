@@ -5,7 +5,7 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import { Recipe, Favorite } from "../types";
+import { Recipe } from "../types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import SuccessToast from "../components/toast";
 

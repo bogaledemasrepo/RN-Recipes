@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ScrollView,
   View,
@@ -7,12 +7,15 @@ import {
   TouchableOpacity,
   StyleSheet,
   StatusBar,
-  Dimensions,Share, Alert
+  Dimensions,
+  Share,
+  Alert,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import YoutubePlayer from "react-native-youtube-iframe"; // Import this
 import { useRecipeContext } from "../context/RecipeContext";
 import { parseIngredients } from "../utils/parseIngredient";
+import { Recipe } from "../types";
 
 const { width } = Dimensions.get("window");
 
@@ -23,62 +26,77 @@ const DetailScreen: React.FC<{ navigation: any; route: any }> = ({
   const { recipes, favorites, toggleFavorite } = useRecipeContext();
   const { recipe } = route.params as { recipe: any };
 
-  if (!recipe) return <Text style={styles.errorText}>Recipe not found.</Text>;
+  const [isFavorite, setIsFavorite] = React.useState(false);
+  const checkIfFavorite = (item: Recipe) => {
+    setIsFavorite(favorites.some((fav) => fav.idMeal === item.idMeal));
+  };
 
   const fullRecipe = recipes.find((r) => r.idMeal === recipe.idMeal) || recipe;
   const ingredients = parseIngredients(fullRecipe);
-  const isFavorite = favorites.includes(fullRecipe.idMeal);
   const [playing, setPlaying] = useState(false);
+
+  useEffect(() => {
+    checkIfFavorite(fullRecipe);
+  }, []);
+
+    const handleSetFavorite = ()=>{
+    setIsFavorite((prev)=>!prev)
+    toggleFavorite(fullRecipe)
+  }
 
   // Helper: Extracts "xcjSyakoWua" from "https://www.youtube.com/watch?v=xcjSyakoWua"
   const getYouTubeId = (url: string) => {
-    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    const regExp =
+      /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
     const match = url?.match(regExp);
-    return (match && match[2].length === 11) ? match[2] : null;
+    return match && match[2].length === 11 ? match[2] : null;
   };
 
-// ... inside the component
-const onShare = async () => {
-  try {
-    const result = await Share.share({
-      message: `Check out this amazing ${fullRecipe.strMeal} recipe! \n\nWatch it here: ${fullRecipe.strYoutube}`,
-      url: fullRecipe.strYoutube, // iOS support for link preview
-      title: `Recipe: ${fullRecipe.strMeal}`,
-    });
-  } catch (error: any) {
-    Alert.alert("Error", "Could not share the recipe");
-  }
-};
+  // ... inside the component
+  const onShare = async () => {
+    try {
+      const result = await Share.share({
+        message: `Check out this amazing ${fullRecipe.strMeal} recipe! \n\nWatch it here: ${fullRecipe.strYoutube}`,
+        url: fullRecipe.strYoutube, // iOS support for link preview
+        title: `Recipe: ${fullRecipe.strMeal}`,
+      });
+    } catch (error: any) {
+      Alert.alert("Error", "Could not share the recipe");
+    }
+  };
 
   const videoId = getYouTubeId(fullRecipe.strYoutube);
-
+  if (!recipe) return <Text style={styles.errorText}>Recipe not found.</Text>;
   return (
     <View style={styles.mainContainer}>
       <StatusBar barStyle="light-content" />
 
       {/* Floating Header Buttons */}
-<View style={styles.headerOverlay}>
-  <TouchableOpacity onPress={() => navigation.goBack()} style={styles.iconButton}>
-    <Ionicons name="chevron-back" size={24} color="#1A1A1A" />
-  </TouchableOpacity>
+      <View style={styles.headerOverlay}>
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
+          style={styles.iconButton}
+        >
+          <Ionicons name="chevron-back" size={24} color="#1A1A1A" />
+        </TouchableOpacity>
 
-  <View style={styles.rightHeaderButtons}>
-    <TouchableOpacity onPress={onShare} style={styles.iconButton}>
-      <Ionicons name="share-outline" size={22} color="#1A1A1A" />
-    </TouchableOpacity>
-    
-    <TouchableOpacity 
-      onPress={() => toggleFavorite(fullRecipe)} 
-      style={styles.iconButton}
-    >
-      <Ionicons 
-        name={isFavorite ? "heart" : "heart-outline"} 
-        size={24} 
-        color={isFavorite ? "#FF6F61" : "#1A1A1A"} 
-      />
-    </TouchableOpacity>
-  </View>
-</View>
+        <View style={styles.rightHeaderButtons}>
+          <TouchableOpacity onPress={onShare} style={styles.iconButton}>
+            <Ionicons name="share-outline" size={22} color="#1A1A1A" />
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={handleSetFavorite}
+            style={styles.iconButton}
+          >
+            <Ionicons
+              name={isFavorite ? "heart" : "heart-outline"}
+              size={24}
+              color={isFavorite ? "#FF6F61" : "#1A1A1A"}
+            />
+          </TouchableOpacity>
+        </View>
+      </View>
 
       <ScrollView showsVerticalScrollIndicator={false} bounces={false}>
         {/* Full-width Image */}
@@ -114,7 +132,6 @@ const onShare = async () => {
           </View>
 
           <View style={styles.divider} />
-
           <View style={styles.divider} />
 
           {/* Ingredients Section */}
@@ -284,7 +301,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: "#4A4A4A",
   },
-   videoSection: {
+  videoSection: {
     marginTop: 32,
   },
   videoWrapper: {
