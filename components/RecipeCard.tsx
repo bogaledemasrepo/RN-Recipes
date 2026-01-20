@@ -28,6 +28,10 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
   useEffect(() => {
     checkIfFavorite(item)
   }, []);
+  const handleSetFavorite = ()=>{
+    setIsFavorite((prev)=>!prev)
+    toggleFavorite(item)
+  }
   return (
     <TouchableOpacity style={styles.card} onPress={() => onPress(item)}>
       <Image
@@ -46,7 +50,7 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
         <Text style={styles.cardSubtitle}>{item.strCategory}</Text>
         <Text style={styles.userIdText}>{item.timestamp}</Text>
       </View>
-      <TouchableOpacity onPress={() => toggleFavorite(item)}>
+      <TouchableOpacity onPress={handleSetFavorite}>
         <MaterialIcons name={isFavorite ? "favorite" : "favorite-outline"} size={20} color={isFavorite ? "#FF6F61" : "#8f8f8f40"} />
       </TouchableOpacity>
     </TouchableOpacity>
