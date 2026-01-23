@@ -10,7 +10,8 @@ import RecipeCard from "../components/RecipeCard";
 import { useRecipeContext } from "../context/RecipeContext";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import EmptyState from "../components/ListEmpty";
-import FavListHeader from "../components/fav-eader";
+import { FlashList } from "@shopify/flash-list"
+import FavListHeader from "../components/fav-header";
 
 const FavoritesScreen: React.FC<{navigation: any}> = ({navigation}:{navigation: any}) => {
   const {top,bottom}=useSafeAreaInsets();
@@ -22,7 +23,7 @@ const FavoritesScreen: React.FC<{navigation: any}> = ({navigation}:{navigation: 
 
   return (
     <View style={[styles.screenContainer,{paddingTop:top,paddingBottom:bottom}]}>
-          <FlatList
+          <FlashList
           showsVerticalScrollIndicator={false}
           refreshing={loading}
             data={favorites}
@@ -41,7 +42,7 @@ const FavoritesScreen: React.FC<{navigation: any}> = ({navigation}:{navigation: 
           />
     </View>
   );
-};
+};  
 
 const styles = StyleSheet.create({
   screenContainer: {

@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, FlatList, ActivityIndicator, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
+import { FlashList } from "@shopify/flash-list";
 import RecipeCard from '../components/RecipeCard';
 import { useRecipeContext } from '../context/RecipeContext';
 import { Favorite, Recipe } from '../types';
@@ -8,7 +9,7 @@ import ListHeader from '../components/header';
 import EmptyState from '../components/ListEmpty';
 
 const HomeScreen: React.FC<{navigation: any}> = ({navigation}) => {
-  const { loading, recipes,toggleFavorite,getRecipes} = useRecipeContext();
+  const { loading, recipes,getRecipes} = useRecipeContext();
   const handleRecipePress = (item: Recipe | Favorite) => {
     navigation.navigate('Detail',{recipe:item});
   };
@@ -19,7 +20,7 @@ const {top,bottom}=useSafeAreaInsets();
   return (  
     <View style={[ styles.screenContainer,{paddingTop:top,paddingBottom:bottom}]}>
       
-          <FlatList
+          <FlashList
             showsVerticalScrollIndicator={false}
             refreshing={loading}
             onRefresh={getRecipes}
@@ -28,7 +29,6 @@ const {top,bottom}=useSafeAreaInsets();
             renderItem={({ item }) => (
               <RecipeCard
                 item={item}
-                toggleFavorite={toggleFavorite}
                 onPress={()=>handleRecipePress(item)}
               />
             )}
