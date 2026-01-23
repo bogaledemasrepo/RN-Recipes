@@ -66,11 +66,11 @@ const RecipesProvider = ({ children }: { children: ReactNode }) => {
       updatedFavorites = favorites.filter(
         (item) => item.idMeal !== value.idMeal,
       );
-      setToastMessage("Added to Favorites");
+      setToastMessage("Removed from Favorites");
       setShowToast(true);
     } else {
       updatedFavorites = [...favorites, value];
-      setToastMessage("Removed from Favorites");
+       setToastMessage("Added to Favorites");
       setShowToast(true);
     }
     setFavorites(updatedFavorites);
