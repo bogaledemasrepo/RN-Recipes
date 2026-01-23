@@ -6,7 +6,7 @@ import { useRecipeContext } from "../context/RecipeContext";
 
 interface RecipeCardProps {
   item: Recipe;
-  toggleFavorite: (recipe: Recipe) => void;
+  toggleFavorite?: (recipe: Recipe) => void;
   onPress: (item: Recipe) => void;
 }
 
@@ -24,6 +24,7 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
     checkIfFavorite(item)
   }, []);
   const handleSetFavorite = ()=>{
+    if(!toggleFavorite) return;
     setIsFavorite((prev)=>!prev)
     toggleFavorite(item)
   }
@@ -45,9 +46,9 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
         <Text style={styles.cardSubtitle}>{item.strCategory}</Text>
         <Text style={styles.userIdText}>{item.timestamp}</Text>
       </View>
-      <TouchableOpacity onPress={handleSetFavorite}>
+      {toggleFavorite && <TouchableOpacity onPress={handleSetFavorite}>
         <MaterialCommunityIcons name={isFavorite ? "heart-minus-outline" : "heart-plus-outline"} size={20} color={isFavorite ? "#FF6F61" : "#8f8f8f40"} />
-      </TouchableOpacity>
+      </TouchableOpacity>}
     </TouchableOpacity>
   );
 };
