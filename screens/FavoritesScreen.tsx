@@ -10,6 +10,7 @@ import RecipeCard from "../components/RecipeCard";
 import { useRecipeContext } from "../context/RecipeContext";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import EmptyState from "../components/ListEmpty";
+import FavListHeader from "../components/fav-eader";
 
 const FavoritesScreen: React.FC<{navigation: any}> = ({navigation}:{navigation: any}) => {
   const {top,bottom}=useSafeAreaInsets();
@@ -33,8 +34,9 @@ const FavoritesScreen: React.FC<{navigation: any}> = ({navigation}:{navigation: 
                 onPress={handleRecipePress}
               />
             )}
+            ListHeaderComponent={()=><FavListHeader navigation={navigation}  />}
             contentContainerStyle={styles.listContent}
-            ListEmptyComponent={EmptyState}
+            ListEmptyComponent={()=><EmptyState title="No Favorite Found" description=""/>}
             style={{ flex: 1 }}
           />
     </View>
@@ -45,8 +47,6 @@ const styles = StyleSheet.create({
   screenContainer: {
     flex: 1,
     backgroundColor: "#F5F5F5",
-    paddingHorizontal: 12,
-    paddingTop: 20,
   },
   heading: {
     fontSize: 28,
