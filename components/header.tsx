@@ -1,8 +1,6 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import AntDesign from '@expo/vector-icons/AntDesign';
 
 const ListHeader = ({onFavoritePress}:{onFavoritePress: () => void}) => {
   return (
@@ -22,7 +20,7 @@ const ListHeader = ({onFavoritePress}:{onFavoritePress: () => void}) => {
       </View>
 
       <TouchableOpacity onPress={onFavoritePress} style={styles.favoriteButton} activeOpacity={0.7}>
-        <AntDesign name="heart" size={22} color="#666" />
+        <MaterialCommunityIcons name="heart-circle-outline" size={28} color="#FF6F61" />
       </TouchableOpacity>
     </View>
   );
