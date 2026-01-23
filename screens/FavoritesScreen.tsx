@@ -23,6 +23,7 @@ const FavoritesScreen: React.FC<{navigation: any}> = ({navigation}:{navigation: 
 
   return (
     <View style={[styles.screenContainer,{paddingTop:top,paddingBottom:bottom}]}>
+          <FavListHeader navigation={navigation}  />
           <FlashList
           showsVerticalScrollIndicator={false}
           refreshing={loading}
@@ -35,7 +36,6 @@ const FavoritesScreen: React.FC<{navigation: any}> = ({navigation}:{navigation: 
                 onPress={handleRecipePress}
               />
             )}
-            ListHeaderComponent={()=><FavListHeader navigation={navigation}  />}
             contentContainerStyle={styles.listContent}
             ListEmptyComponent={()=><EmptyState title="No Favorite Found" description=""/>}
             style={{ flex: 1 }}
@@ -68,6 +68,7 @@ const styles = StyleSheet.create({
   },
   listContent: {
     paddingBottom: 20,
+    paddingHorizontal: 8,
   },
   emptyContainer: {
     flex: 1,
