@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Recipe",
-    "slug": "Recipe",
+    "slug": "rn-recipes",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -30,6 +30,12 @@
     },
     "plugins": [
       "expo-font"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "5095eb29-29e7-438a-b971-c667dc3dfad1"
+      }
+    },
+    "owner": "bogitech"
   }
 }
