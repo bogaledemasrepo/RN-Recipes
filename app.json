@@ -7,11 +7,6 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
-    "splash": {
-      "image": "./assets/icon.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.bogye.Recipe"
@@ -34,11 +29,7 @@
         "expo-splash-screen",
         {
           "backgroundColor": "#232323",
-          "image": "./assets/images/splash-icon.png",
-          "dark": {
-            "image": "./assets/images/splash-icon-dark.png",
-            "backgroundColor": "#000000"
-          },
+          "image": "./assets/splash-light-icon.png",
           "imageWidth": 200
         }
       ]
@@ -48,6 +39,12 @@
         "projectId": "5095eb29-29e7-438a-b971-c667dc3dfad1"
       }
     },
-    "owner": "bogitech"
+    "owner": "bogitech",
+    "updates": {
+      "url": "https://u.expo.dev/5095eb29-29e7-438a-b971-c667dc3dfad1",
+      "fallbackToCacheTimeout": 0,
+      "checkAutomatically": "ON_LOAD",
+      "enableBsdiffPatchSupport": true
+    }
   }
 }

@@ -26,10 +26,12 @@ const AppNavigator: FC = () => {
   const {loading}=useRecipeContext();
   const Stack = createStackNavigator<RootStackParamList>();
   useEffect(() => {
+    console.log(loading,"LOADING...",Date.now())
     if (!loading) {
       SplashScreen.hide();
     }
   }, [loading]);
+  
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
