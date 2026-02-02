@@ -30,7 +30,13 @@
         {
           "backgroundColor": "#232323",
           "image": "./assets/splash-light-icon.png",
-          "imageWidth": 200
+          "resizeMode": "cover",
+          "enableFullScreenImage_legacy": true,
+          "imageWidth": 200,
+          "dark": {
+            "image": "./assets/images/splash-icon-dark.png",
+            "backgroundColor": "#000000"
+          }
         }
       ]
     ],
