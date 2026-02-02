@@ -1,10 +1,12 @@
-import React, { FC } from "react";
+import React, { FC, useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 
 import HomeScreen from "./screens/HomeScreen";
 import FavoritesScreen from "./screens/FavoritesScreen";
 import DetailScreen from "./screens/DetailScreen";
+import * as SplashScreen from 'expo-splash-screen';
+import { useRecipeContext } from "./context/RecipeContext";
 
 export type RootStackParamList = {
   Index: undefined;
@@ -19,9 +21,15 @@ export type HomeScreenProps = {
 export type FavoritesScreenProps = {
   navigation: any;
 };
+SplashScreen.preventAutoHideAsync();
 const AppNavigator: FC = () => {
+  const {loading}=useRecipeContext();
   const Stack = createStackNavigator<RootStackParamList>();
-
+  useEffect(() => {
+    if (!loading) {
+      SplashScreen.hide();
+    }
+  }, [loading]);
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
